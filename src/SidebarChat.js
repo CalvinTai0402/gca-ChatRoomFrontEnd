@@ -1,9 +1,10 @@
 import React from "react";
 import "./SidebarChat.css";
 import axios from "./axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function SidebarChat({ id, addNewChat, name }) {
+  const history = useHistory();
   const createChat = async () => {
     const roomName = prompt("What shall be the name of this room?");
     if (roomName) {
@@ -11,7 +12,12 @@ function SidebarChat({ id, addNewChat, name }) {
         roomName: roomName,
         messages: [],
       });
-      alert("Room added!");
+      var redirectLink = "";
+      await axios.get("chatrooms/sync/").then((data) => {
+        const rooms = data.data;
+        redirectLink = "/rooms/" + rooms[rooms.length - 1]._id;
+        history.push(redirectLink);
+      });
     }
   };
   return !addNewChat ? (
