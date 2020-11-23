@@ -7,36 +7,75 @@ import MicNoneIcon from "@material-ui/icons/MicNone";
 import React, { useState, useRef, useEffect } from "react";
 import axios from "./axios";
 import "./Chat.css";
+import { useParams } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
+import { v4 as uuidv4 } from "uuid";
 
-function Chat({ messages }) {
+function Chat() {
   const [input, setInput] = useState("");
+  const [roomMessages, setRoomMessages] = useState([]);
+  const { roomId } = useParams();
+  const [roomName, setRoomName] = useState("");
   const messagesEndRef = useRef(null);
+  const [{ user }, dispatch] = useStateValue();
+
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
+
+  const fetchRoom = async () => {
+    await axios.get(`/chatrooms/sync/${roomId}`).then((room) => {
+      setRoomName(room.data.roomName);
+    });
+  };
+
+  const fetchRoomMessages = async () => {
+    await axios.get(`/chatrooms/sync/${roomId}/messages`).then((data) => {
+      setRoomMessages(data.data);
+    });
+  };
+
+  // useEffect(() => {
+  //   if (roomMessages !== undefined && roomMessages.length !== 0) {
+  //     scrollToBottom();
+  //   }
+  // }, [roomMessages]);
+
+  useEffect(async () => {
+    fetchRoom();
+    fetchRoomMessages();
+  }, [roomId]);
+
   useEffect(() => {
-    if (messages !== undefined && messages.length !== 0) {
-      scrollToBottom();
-    }
-  }, [messages]);
+    fetchRoomMessages();
+  }, [roomMessages]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("messages/new", {
-      name: "Calvin",
+    const date = new Date();
+    await axios.post(`/chatrooms/sync/${roomId}/messages`, {
+      name: user.displayName.split(" ")[0],
       message: input,
-      timeStamp: "Demo timeStamp",
-      received: true,
+      timeStamp: date.getHours() + ":" + date.getMinutes(),
     });
     setInput("");
   };
+
   return (
     <div className="chat">
       <div className="chat_header">
-        <Avatar></Avatar>
-        <div className="chat_headerInfo">
-          <h1>Room</h1>
-          <p>Test</p>
-        </div>
+        {roomName ? (
+          <div className="chat_headerInfo">
+            <h1>{roomName}</h1>
+            <p>
+              last message at {roomMessages[roomMessages.length - 1]?.timeStamp}
+            </p>
+          </div>
+        ) : (
+          <h1></h1>
+        )}
+        {/* <Avatar></Avatar> */}
+
         <div className="chat_headerRight">
           <IconButton>
             <SearchIcon htmlColor="white" fontSize="large"></SearchIcon>
@@ -47,11 +86,13 @@ function Chat({ messages }) {
         </div>
       </div>
       <div className="chat_body">
-        {messages.map((message) => (
+        {roomMessages.map((message) => (
           <p
+            key={uuidv4()}
             ref={messagesEndRef}
-            key={message._id}
-            className={`chat_message ${message.received && "chat_receiver"}`}
+            className={`chat_message ${
+              message.name === user.displayName.split(" ")[0] && "chat_receiver"
+            }`}
           >
             <span className="chat_name">{message.name}</span>
             {message.message}

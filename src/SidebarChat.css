@@ -20,3 +20,21 @@
   font-size: 12px;
   margin-left: 10px;
 }
+
+.center {
+  color: white;
+  padding: 15px;
+  cursor: pointer;
+  align-items: center;
+  border-bottom: 1px solid white;
+  text-align: center;
+}
+
+.center:hover {
+  background-color: rgba(243, 243, 235, 0.041);
+}
+
+a {
+  text-decoration: none !important;
+  color: white;
+}

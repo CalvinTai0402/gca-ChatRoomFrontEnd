@@ -6,15 +6,14 @@ import MessageIcon from "@material-ui/icons/Message";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import SearchIcon from "@material-ui/icons/Search";
 import SidebarChat from "./SidebarChat";
+import { useStateValue } from "./StateProvider";
 
-function Sidebar() {
+function Sidebar({ chatrooms }) {
+  const [{ user }, dispatch] = useStateValue();
   return (
     <div className="sidebar">
       <div className="sidebar_header">
-        <Avatar
-          fontSize="large"
-          src="https://media-exp1.licdn.com/dms/image/C5603AQHooVH7_Zr8ig/profile-displayphoto-shrink_200_200/0?e=1611187200&v=beta&t=ilg7lJdcIT6yadxGARPKC4ZE55cEtpULBIazPXr4hFo"
-        ></Avatar>
+        <Avatar fontSize="large" src={user?.photoURL}></Avatar>
         <div className="sidebar_headerRight">
           <IconButton>
             <RadioButtonUncheckedIcon
@@ -37,18 +36,16 @@ function Sidebar() {
         </div>
       </div>
       <div className="sidebar_chats">
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
-        <SidebarChat></SidebarChat>
+        <SidebarChat addNewChat name={"Create New Room"}></SidebarChat>
+        {chatrooms.map((chatroom) => {
+          return (
+            <SidebarChat
+              key={chatroom._id}
+              id={chatroom._id}
+              name={chatroom.roomName}
+            ></SidebarChat>
+          );
+        })}
       </div>
     </div>
   );
