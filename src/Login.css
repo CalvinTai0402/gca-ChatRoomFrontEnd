@@ -1,19 +1,24 @@
 .login_container {
   padding: 100px;
   text-align: center;
-  background-color: rgba(117, 111, 108, 0.356);
+  background-color: white;
   border-radius: 20px;
   box-shadow: 5px 5px 10px 5px #aaaaaa;
 }
 
 .login_container > img {
   object-fit: contain;
-  height: 80px;
+  height: 200px;
   margin-bottom: 20px;
 }
 
+.login_text {
+  font-size: xx-large;
+  text-transform: uppercase;
+}
+
 .login_container > button {
-  background-color: rgba(14, 228, 243, 0.719);
+  background-color: rgba(243, 252, 253, 0.384);
   margin-top: 20px;
   color: black;
 }

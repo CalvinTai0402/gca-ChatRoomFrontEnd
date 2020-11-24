@@ -24,7 +24,7 @@ function Login() {
     <div className="login">
       <div className="login_container">
         <img
-          src="https://lh3.googleusercontent.com/proxy/lY83_PZ55UrEd5sgJB6rUuMb1JCmZ1Soj4lPdk5qZYPjGd3bR4DmFfhtnITlOaROwjzlksEpg0nYb3fubk622xx0M7pRHSugh_SgAR7TCADBiFtyNxXkgDApSS5oxEvbHZkJgvBHnGZcpNmf0dAXjA"
+          src="https://cdn.dribbble.com/users/599838/screenshots/4163148/chat-room-logo.jpg"
           alt="GCA"
         ></img>
         <div className="login_text">Sign in to GCA Chatroom</div>

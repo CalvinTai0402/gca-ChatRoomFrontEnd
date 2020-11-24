@@ -8,6 +8,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "./axios";
 import "./Chat.css";
 import { useParams } from "react-router-dom";
+import { actionTypes } from "./reducer";
 import { useStateValue } from "./StateProvider";
 import { v4 as uuidv4 } from "uuid";
 
@@ -20,7 +21,9 @@ function Chat() {
   const [{ user }, dispatch] = useStateValue();
   const scrollToBottom = () => {
     const scrollDiv = document.getElementById("scroll_bottom");
-    scrollDiv.scrollTop = scrollDiv.scrollHeight;
+    if (scrollDiv) {
+      scrollDiv.scrollTop = scrollDiv.scrollHeight;
+    }
   };
 
   const fetchRoom = async () => {
@@ -66,6 +69,10 @@ function Chat() {
       timeStamp: hours + ":" + mins,
     });
     fetchRoomMessages();
+    dispatch({
+      type: actionTypes.UPDATE_LAST_MESSAGE,
+      updateLastMessage: true,
+    });
     setInput("");
   };
 
@@ -96,7 +103,7 @@ function Chat() {
           </div>
         </div>
 
-        {/* <div id="scroll_bottom" className="chat_body"></div> */}
+        <div className="chat_body"></div>
 
         <div className="chat_footer">
           <div className="chat_footerLeft">
